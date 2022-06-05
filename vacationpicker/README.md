@@ -1,4 +1,4 @@
-# vacationpciker
+# vacationpicker
 
 ## Project setup
 ```

@@ -1,15 +1,15 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
- <vacationPicker></vacationPicker>
+<VacationPicker/>
 </template>
 
 <script>
-import vacationPicker from './components/vacationPicker.vue'
+import VacationPicker from "@/components/VacationPicker";
 
 export default {
   name: 'App',
   components: {
-    vacationPicker
+    VacationPicker
   }
 }
 </script>
