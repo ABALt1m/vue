@@ -1,15 +1,34 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col bg-success"> Bruh</div>
-      <div class="col bg-success"> Bruh</div>
-    </div>
+    <h1>pick your next vacation</h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="country in countryData.countries" v-bind:key="country.id">
+        {{country.name}}
+      </li>
+    </ul>
+    <p>Teller = {{counter}}</p>
+    <button v-on:click="counter++" class="btn btn-success">
+      +
+    </button>
+    <button v-on:click="counter--" class="btn btn-danger">
+      -
+    </button>
+
+    <button @click="increment()" class="btn btn-success">+</button>
+    <button @click="decrement()" class="btn btn-danger">-</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'VacationPicker'
+  name: 'VacationPicker',
+  data(){
+    return{
+      countryData,
+      counter:0
+
+    }
+  }
     }
 </script>
 
