@@ -14,14 +14,14 @@
       -
     </button>
 
-    <button @click="increment()" class="btn btn-success">+</button>
-    <button @click="decrement()" class="btn btn-danger">-</button>
+    
   </div>
 </template>
 
 <script>
+import countryData from '@/data/countryData'
 export default {
-  name: 'VacationPicker',
+  name: "VacationPicker",
   data(){
     return{
       countryData,
