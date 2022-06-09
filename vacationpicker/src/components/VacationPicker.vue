@@ -2,9 +2,31 @@
   <div class="container">
     <h1>pick your next vacation</h1>
     <ul class="list-group">
-      <li class="list-group-item" v-for="country in countryData.countries" v-bind:key="country.id">
+      <li class="list-group-item">
+        <img :src="getImgUrl(selectedCountry.img)" class="img-fluid">
+      </li>
+      <li class="list-group-item" v-for="(country, index) in countryData.countries" v-bind:key="country.id" :title="country.details" @click="selectCountry(index)">
         {{country.name}}
       </li>
+      <li class="list-group-item">
+        {{selectedCountry.id}}
+      </li>
+      <li class="list-group-item">
+        {{selectedCountry.name}}
+      </li>
+      <li class="list-group-item">
+        {{selectedCountry.capital}}
+      </li>
+      <li class="list-group-item">
+        {{selectedCountry.details}}
+      </li>
+      <li class="list-group-item">
+        {{selectedCountry.cost}}
+      </li>
+      <li v-if="isExpensive" class="list-group-item">
+      <p class="bg-danger">DUUR!!</p>
+      </li>
+     
     </ul>
     <p>Teller = {{counter}}</p>
     <button v-on:click="counter++" class="btn btn-success">
@@ -19,17 +41,38 @@
 </template>
 
 <script>
-import countryData from '@/data/countryData'
+import countryData from '@/data/countryData';
 export default {
   name: "VacationPicker",
   data(){
     return{
       countryData,
-      counter:0
-
+      counter:0,
+      selectedCountryIndex: 0
+    }
+  },
+  methods:{
+    selectCountry(index){
+      console.warn('click');
+      this.selectedCountryIndex = index;
+    }
+  },
+  computed:{
+    selectedCountry(){
+      console.log("country aangeroepen");
+      return{
+        ...this.countryData.countries[this.selectedCountryIndex]
+      }
+    },
+    isExpensive(){
+      return this.countryData.countries[this.selectedCountryIndex].cost > 1000
+    },
+    getImgUrl(img){
+      return require('../assets/countries/'+ img);
     }
   }
     }
+   
 </script>
 
 
