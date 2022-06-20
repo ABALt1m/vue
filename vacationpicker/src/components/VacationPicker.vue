@@ -14,6 +14,7 @@
             {{ country.name }}
              <span class="float-end" v-if="country.rating !== 0">{{country.rating}}</span>
           </li>
+        
          
            <li
             class="list-group-item bg-dark text-white"
