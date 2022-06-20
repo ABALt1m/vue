@@ -2,167 +2,144 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-6">
-        <div class="d-flex flex-column justify-content-cente">
-          <h1>pick your next vacation</h1>
-          <ul class="list-group">
-            <li
-              class="list-group-item bg-dark text-white"
-              v-for="(country, index) in countryData.countries"
-              v-bind:key="country.id"
-              v-bind:title="country.details"
-              @click="selectCountry(index)"
-            >
-              {{ country.name }}
-            </li>
-        <li class="list-group-item bg-dark text-white" v-for="(country, index) in newCountries" :key="index">
-          {{country}}
-        </li>
-          </ul>
-
-          <div class="row text-center">
-            <div class="col mt-4">
-              <button @click="decrement()" class="btn btn-danger px-4">
-                previous
-              </button>
-              <button @click="increament()" class="btn btn-danger px-4">
-                next
-              </button>
-            </div>
-          </div>
-            <div class="container">
-              <h2>Destination cheaper than : </h2>
-              <select class="form-control-lg" v-model="selectedCost" @change="filterCountries()"><option v-for="(cost , index) in costs " :key="index" value="cost" >{{ cost }}</option></select>
-              <ul class="list-group">
-                <li v-for="(country, index) in filteredCountries" :key="index" class="list-group-item">
-                  {{country.name}} (EUR: {{country.cost}})
-                </li>
-              </ul>
-            </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h2>selected countries</h2>
+        <h1>Pick your next vacation</h1>
         <ul class="list-group">
-          <li class="list-group-item">
-            {{ selectedCountry.id }}
+          <li
+            class="list-group-item bg-dark text-white"
+            v-for="(country, index) in countryData.countries"
+            v-bind:key="country.id"
+            v-bind:title="country.details"
+            @click="selectCountry(index)"
+          >
+            {{ country.name }}
           </li>
-          <li class="list-group-item">
-            <span class="float-right badge badge-secondary badge-pill" v-if="country.rating !== 0">
-              {{country.rating}}
-            </span>
+           <li
+            class="list-group-item bg-dark text-white"
+            v-for="(country, index) in newCountries"
+            :key="index"
+          >
+            {{ country }}
           </li>
-          <li class="list-group-item">
-            <img :src="getImgUrl(selectedCountry.img)" class="img-fluid" />
-          </li>
-          <li class="list-group-item">
-            {{ selectedCountry.name }}
-          </li>
-          <li class="list-group-item">
-            {{ selectedCountry.capital }}
-          </li>
-          <li class="list-group-item">
-            <details>
-              <summary>more info</summary>
-              {{ selectedCountry.details }}
-            </details>
-          </li>
-          <li class="list-group-item">
-            {{ selectedCountry.cost }}
-          </li>
-          <li v-if="isExpensive" class="list-group-item pt-3">
-            <p class="bg-danger text-white">DUUR!!</p>
+        </ul>
+        <hr />
+        <div class="row text-center">
+          <div class="col m-1 mt-4">
+            <button @click="decrement()" class="btn btn-danger rounded-circle mx-1 py-2 px-4">
+              Previous
+            </button>
+            
+            <button @click="increment()" class="btn btn-success rounded-circle mx-1 py-2 px-4">
+              Next
+            </button>
+          </div>
+        </div>
+        <h2>Other countries:</h2>
+        <input
+          type="text"
+          v-model="newCountry"
+          @keyup.enter="addCountry(newCountry)"
+          class="form-control-lg"
+          placeholder="New country..."
+        />
+        <button
+          @click="addCountry(newCountry)"
+          class="btn btn-primary btn-lg mx-3 text-white"
+        >
+         Add coutry
+        </button>
+        <h4 class="text-center">{{ newCountry }}</h4>
+        <ul class="list-group">
+         
+        </ul>
+        <hr />
+        <h2>countries that are cheaper than : </h2>
+        <select
+          class="form-control-lg"
+          v-model="selectedCost"
+          @change="filterCountries()"
+        >
+          <option v-for="(cost, index) in costs" :key="index" :value="cost">
+            {{ cost }}
+          </option>
+        </select>
+        <ul class="list-group">
+          <li
+            v-for="(country, index) in filteredCountries"
+            :key="index"
+            class="list-group-item"
+          >
+            {{ country.name }} (EUR: {{ country.cost }})
           </li>
         </ul>
       </div>
-    </div>
-    <div class="container">
-      <h2>Nieuwe land toevoegen</h2>
-      <input type="text" v-model="newCountry"/> <button class="btn btn-dark" @click="addCountry()">Toevoegen</button>
-      <h3>{{newCountry}}</h3>
-      <ul class="list-group">
-        
-      </ul>
+      <div class="col-12 col-md-6">
+        <CountryDetail v-if="selectedCountry" :country="selectedCountry"/>
+      </div>
     </div>
   </div>
-    <div class="col-6">
-      <CountryDetail v-if="selectedCountry" @rating="onRating($event)" :country="selectedCountry"/>
-    </div>
-  
+
+  <!-- <p>teller = {{counter}}</p>
+  <button v-on:click="counter++" class="btn btn-success">+</button>
+  <button v-on:click="counter--" class="btn btn-danger">-</button>-->
 </template>
 
 <script>
+import CountryDetail from "@/components/countryDetail";
 import countryData from "@/data/countryData";
-import mixins from "@/mixins/mixins";
-import countryDetail from "@/components/countryDetail";
+
 export default {
   name: "VacationPicker",
-  components:{countryDetail},
-  mixins:[mixins],
+  components: {
+    CountryDetail
+  },
   data() {
     return {
       countryData,
       selectedCountryIndex: 0,
-      newCountry:"",
-      newCountries:[],
+      newCountry: "",
+      newCountries: [],
       selectedCost: 1000,
-      costs: [1000, 2000 , 3000, 4000, 5000, 6000],
-      filteredCountries:[]
+      costs: [1000, 2000, 3000, 4000, 5000, 6000],
+      filteredCountries: [],
     };
   },
   methods: {
-    increament() {
+    increment() {
       this.selectedCountryIndex++;
     },
     decrement() {
       this.selectedCountryIndex--;
     },
+    startBtn() {
+      this.selectedCountryIndex = 0;
+    },
     selectCountry(index) {
       console.warn("click");
       this.selectedCountryIndex = index;
     },
-    getImgUrl(img) {
-      return require("../assets/countries/" + img);
+    addCountry(country) {
+      this.newCountries.push(country);
+      this.newCountry = "";
     },
-    addCountry(){
-      this.newCountries.push(this.newCountry);
-      this.newCountry="";
+    filterCountries() {
+      // filter landen, gebaseerd op selectedCost. Deze wordt
+      // met v-model in de selectielijst aangepast.
+      console.log("Filtered cost:::", this.selectedCost);
+      this.filteredCountries = this.countryData.countries.filter(
+        (country) => country.cost < this.selectedCost
+      );
     },
-    filterCountries(){
-      this.filteredCountries = this.countryData.countries.filter(country => country.cost < this.selectedCost)
-    },
-    onRating(rating){
-      this.countryData.countries[this.selectedCountryIndex].rating += rating;
-    }
-    
   },
   computed: {
     selectedCountry() {
-      console.log("selectedCountry aangeroepen");
+      console.log(`country aangeroepen`);
       return {
         ...this.countryData.countries[this.selectedCountryIndex],
       };
     },
-    isExpensive() {
-      return this.countryData.countries[this.selectedCountryIndex].cost > 1000;
-    },
-    
   },
 };
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>

@@ -1,21 +1,20 @@
-
-
-export default{
+export default {
     methods: {
-        getImgUrl(img){
-            return require('../assets/countries/'+ img)
+        getImgUrl(img) {
+            console.log('getImgUrl() wordt aangeroepen vanuit de mixin.');
+            return require('../assets/countries/' + img);
         }
-    } ,
-    created(){
-        console.log("create");
-    } ,
-    updated(){
-        console.log("update");
     },
-    mounted(){
-        console.log("mounted");
+    created() {
+        console.log(`create`);
     },
-    unmounted(){
-        console.log("unmounted");
+    updated() {
+        console.log(`updated`);
+    },
+    mounted() {
+        console.log(`mounted`);
+    },
+    unmouted() {
+        console.log(`unmouted`);
     }
 }
