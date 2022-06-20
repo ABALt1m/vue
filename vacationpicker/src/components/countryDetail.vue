@@ -3,6 +3,10 @@
     <h1>Geselecteerd:</h1>
     <ul class="list-group">
       <li class="list-group-item">{{ country.id }}</li>
+      <span class="float-end">
+        <button @click="setRating(1)">+1</button>
+        <button @click="setRating(-1)">-1</button>
+      </span>
       <li class="list-group-item">
         <img :src="getImgUrl(country.img)" class="img-fluid" />
       </li>
@@ -40,6 +44,12 @@ export default {
       return this.country < 800;
     },
   },
+  methods:{
+    setRating(value){
+      this.$emit('rating', value);
+    }
+  },
+  emits:['rating']
 };
 </script>
 

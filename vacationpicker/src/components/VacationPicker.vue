@@ -5,14 +5,16 @@
         <h1>Pick your next vacation</h1>
         <ul class="list-group">
           <li
-            class="list-group-item bg-dark text-white"
+            class="list-group-item bg-dark text-white onhover"
             v-for="(country, index) in countryData.countries"
             v-bind:key="country.id"
             v-bind:title="country.details"
             @click="selectCountry(index)"
           >
             {{ country.name }}
+             <span class="float-end" v-if="country.rating !== 0">{{country.rating}}</span>
           </li>
+         
            <li
             class="list-group-item bg-dark text-white"
             v-for="(country, index) in newCountries"
@@ -24,11 +26,11 @@
         <hr />
         <div class="row text-center">
           <div class="col m-1 mt-4">
-            <button @click="decrement()" class="btn btn-danger rounded-circle mx-1 py-2 px-4">
-              Previous
+            <button @click="decrement()" class="btn btn-warning rounded-circle mx-1 py-2 px-4">
+              Previouss
             </button>
             
-            <button @click="increment()" class="btn btn-success rounded-circle mx-1 py-2 px-4">
+            <button @click="increment()" class="btn btn-primary rounded-circle mx-1 py-2 px-4">
               Next
             </button>
           </div>
@@ -51,7 +53,8 @@
         <ul class="list-group">
          
         </ul>
-        <hr />
+        <br>
+        <br>
         <h2>countries that are cheaper than : </h2>
         <select
           class="form-control-lg"
@@ -73,14 +76,12 @@
         </ul>
       </div>
       <div class="col-12 col-md-6">
-        <CountryDetail v-if="selectedCountry" :country="selectedCountry"/>
+        <CountryDetail @rating="onRating($event)" v-if="selectedCountry"  :country="selectedCountry"/>
       </div>
     </div>
   </div>
 
-  <!-- <p>teller = {{counter}}</p>
-  <button v-on:click="counter++" class="btn btn-success">+</button>
-  <button v-on:click="counter--" class="btn btn-danger">-</button>-->
+ 
 </template>
 
 <script>
@@ -122,13 +123,14 @@ export default {
       this.newCountry = "";
     },
     filterCountries() {
-      // filter landen, gebaseerd op selectedCost. Deze wordt
-      // met v-model in de selectielijst aangepast.
       console.log("Filtered cost:::", this.selectedCost);
       this.filteredCountries = this.countryData.countries.filter(
         (country) => country.cost < this.selectedCost
       );
     },
+    onRating(rating){
+      this.countryData.countries[this.selectedCountryIndex].rating += rating;
+    }
   },
   computed: {
     selectedCountry() {
@@ -142,4 +144,7 @@ export default {
 </script>
 
 <style scoped>
+.onhover:hover{
+  cursor: pointer;
+}
 </style>
